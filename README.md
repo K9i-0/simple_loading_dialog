@@ -41,7 +41,7 @@ showSimpleLoadingDialog<void>(
   ),
 );
 ```
-#### Using SimpleLoadingDialogTheme
+#### Using SimpleLoadingDialogTheme (recommended)
 To customize the appearance of the dialog using the SimpleLoadingDialogTheme extension, define a theme in your app and pass it to the showSimpleProgressDialog function.
 ```dart
 MaterialApp(
