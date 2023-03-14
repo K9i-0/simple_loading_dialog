@@ -1,4 +1,4 @@
-package com.k9i.simple_progress_dialog.example
+package com.k9i.simple_loading_dialog.example
 
 import io.flutter.embedding.android.FlutterActivity
 

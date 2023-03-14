@@ -95,7 +95,7 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.8.2"
-  simple_progress_dialog:
+  simple_loading_dialog:
     dependency: "direct main"
     description:
       path: ".."

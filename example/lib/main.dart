@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:simple_progress_dialog/simple_progress_dialog.dart';
+import 'package:simple_loading_dialog/simple_loading_dialog.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Simple Progress Dialog Demo',
+      title: 'Simple Loading Dialog Demo',
       theme: ThemeData(
         useMaterial3: true,
         colorSchemeSeed: Colors.blue,
@@ -28,7 +28,7 @@ class DemoPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Simple Progress Dialog Demo'),
+        title: const Text('Simple Loading Dialog Demo'),
       ),
       body: Center(
         child: Column(
@@ -37,7 +37,7 @@ class DemoPage extends StatelessWidget {
             // Success case
             ElevatedButton(
               onPressed: () async {
-                final result = await showSimpleProgressDialog<String>(
+                final result = await showSimpleLoadingDialog<String>(
                   context: context,
                   future: () async {
                     await Future<void>.delayed(const Duration(seconds: 1));
@@ -53,7 +53,7 @@ class DemoPage extends StatelessWidget {
                   ),
                 );
               },
-              child: const Text('Show progress dialog'),
+              child: const Text('Show loading dialog'),
             ),
             const SizedBox(
               height: 32,
@@ -62,7 +62,7 @@ class DemoPage extends StatelessWidget {
             ElevatedButton(
               onPressed: () async {
                 try {
-                  final result = await showSimpleProgressDialog<String>(
+                  final result = await showSimpleLoadingDialog<String>(
                     context: context,
                     future: () async {
                       await Future<void>.delayed(const Duration(seconds: 1));
@@ -89,7 +89,7 @@ class DemoPage extends StatelessWidget {
                   );
                 }
               },
-              child: const Text('Show progress dialog with error'),
+              child: const Text('Show loading dialog with error'),
             ),
             const SizedBox(
               height: 32,
@@ -97,7 +97,7 @@ class DemoPage extends StatelessWidget {
             // Custom dialog
             ElevatedButton(
               onPressed: () async {
-                final result = await showSimpleProgressDialog<String>(
+                final result = await showSimpleLoadingDialog<String>(
                   context: context,
                   future: () async {
                     await Future<void>.delayed(const Duration(seconds: 1));
@@ -129,7 +129,7 @@ class DemoPage extends StatelessWidget {
                   ),
                 );
               },
-              child: const Text('Show progress dialog with custom dialog'),
+              child: const Text('Show loading dialog with custom dialog'),
             ),
           ],
         ),

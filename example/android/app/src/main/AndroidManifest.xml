@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.k9i.simple_progress_dialog.example">
+    package="com.k9i.simple_loading_dialog.example">
    <application
         android:label="example"
         android:name="${applicationName}"

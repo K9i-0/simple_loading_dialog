@@ -1,32 +1,32 @@
-# simple_progress_dialog
-A simple full-screen progress dialog for Flutter.
+# simple_loading_dialog
+A simple full-screen loading dialog for Flutter.
 
 ## Features
-- A very simple full-screen progress dialog.
+- A very simple full-screen loading dialog.
 - Can block user input while waiting for a Future to complete.
 - Rethrows exceptions on error.
 - Customizable dialog appearance.
 - Returns the result of the Future.
 
 ## Usage
-To use this package, add simple_progress_dialog as a dependency in your pubspec.yaml file.
+To use this package, add simple_loading_dialog as a dependency in your pubspec.yaml file.
 
 ### Showing the dialog
-To show the dialog, use the showSimpleProgressDialog function.
+To show the dialog, use the showSimpleLoadingDialog function.
 
 ```dart
-final result = showSimpleProgressDialog<String>(
+final result = showSimpleLoadingDialog<String>(
   context: context,
   future: myFutureFunction,
 );
 ```
-This will show a full-screen progress dialog while waiting for the myFutureFunction to complete.
+This will show a full-screen loading dialog while waiting for the myFutureFunction to complete.
 
 ### Customizing the appearance
 The appearance of the dialog can be customized by passing a dialogBuilder.
 
 ```dart
-showSimpleProgressDialog<void>(
+showSimpleLoadingDialog<void>(
   context: context,
   future: myFutureFunction,
   dialogBuilder: (context) => AlertDialog(
@@ -47,7 +47,7 @@ If an error occurs while waiting for the Future to complete, the exception will 
 
 ```dart
 try {
-  await showSimpleProgressDialog<void>(
+  await showSimpleLoadingDialog<void>(
     context: context,
     future: myFutureFunction,
   );
@@ -57,4 +57,4 @@ try {
 ```
 
 ## License
-This package is licensed under the MIT License. See the [LICENSE](https://github.com/K9i-0/simple_progress_dialog/blob/main/LICENSE) file for details.
+This package is licensed under the MIT License. See the [LICENSE](https://github.com/K9i-0/simple_loading_dialog/blob/main/LICENSE) file for details.

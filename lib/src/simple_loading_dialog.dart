@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-Future<T> showSimpleProgressDialog<T>({
+Future<T> showSimpleLoadingDialog<T>({
   required BuildContext context,
   required Future<T> Function() future,
   Widget Function(BuildContext context)? dialogBuilder,
