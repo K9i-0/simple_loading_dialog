@@ -53,7 +53,7 @@ class SimpleLoadingDialogTheme
     Widget Function(BuildContext context)? dialogBuilder,
   }) {
     return SimpleLoadingDialogTheme(
-      dialogBuilder: dialogBuilder,
+      dialogBuilder: dialogBuilder ?? this.dialogBuilder,
     );
   }
 

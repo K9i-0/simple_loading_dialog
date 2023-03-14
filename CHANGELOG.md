@@ -1,3 +1,6 @@
+## 0.3.2
+- fix SimpleLoadingDialogTheme's copyWith
+
 ## 0.3.1
 - fix demo video path
 ## 0.3.0
