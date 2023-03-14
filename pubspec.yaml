@@ -1,7 +1,7 @@
 name: simple_progress_dialog
-description: A new Flutter package project.
-version: 0.1.0
-homepage:
+description: A simple full-screen progress dialog for Flutter.
+homepage: https://twitter.com/K9i_apps
+repository: https://github.com/K9i-0/simple_progress_dialog
 
 environment:
   sdk: '>=2.18.2 <3.0.0'
