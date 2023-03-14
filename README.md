@@ -10,7 +10,7 @@ A simple full-screen loading dialog for Flutter.
 
 ## Demo
 <p align="center">
-  <img src="https://github.com/K9i-0/simple_loading_dialog/blob/main/gifs/demo.gif" alt="simple_loading_dialog" />
+  <img src="https://raw.githubusercontent.com/K9i-0/simple_loading_dialog/main/gifs/demo.gif" alt="simple_loading_dialog" />
 </p>
 
 
