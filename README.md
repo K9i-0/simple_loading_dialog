@@ -8,6 +8,12 @@ A simple full-screen loading dialog for Flutter.
 - Customizable dialog appearance.
 - Returns the result of the Future.
 
+## Demo
+<p align="center">
+  <img src="https://github.com/K9i-0/simple_loading_dialog/blob/main/gifs/demo.gif" alt="simple_loading_dialog" />
+</p>
+
+
 ## Usage
 To use this package, add simple_loading_dialog as a dependency in your pubspec.yaml file.
 
