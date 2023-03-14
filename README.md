@@ -20,7 +20,7 @@ final result = showSimpleLoadingDialog<String>(
   future: myFutureFunction,
 );
 ```
-This will show a full-screen loading dialog while waiting for the myFutureFunction to complete.
+This will show a full-screen progress dialog while waiting for the myFutureFunction to complete. Once the Future completes, the result will be returned and the dialog will be dismissed.
 
 ### Customizing the appearance
 The appearance of the dialog can be customized by passing a dialogBuilder.
@@ -39,6 +39,37 @@ showSimpleLoadingDialog<void>(
       ],
     ),
   ),
+);
+```
+#### Using SimpleLoadingDialogTheme
+To customize the appearance of the dialog using the SimpleLoadingDialogTheme extension, define a theme in your app and pass it to the showSimpleProgressDialog function.
+```dart
+MaterialApp(
+  title: 'My App',
+  theme: ThemeData(
+    useMaterial3: true,
+    colorSchemeSeed: Colors.blue,
+    // Set default theme like this
+    extensions: [
+      SimpleLoadingDialogTheme(
+        dialogBuilder: (context) {
+          return AlertDialog(
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: const [
+                SizedBox(height: 16),
+                CircularProgressIndicator(),
+                SizedBox(height: 16),
+                Text('Loading...'),
+                SizedBox(height: 16),
+              ],
+            ),
+          );
+        },
+      ),
+    ],
+  ),
+  home: MyHomePage(),
 );
 ```
 

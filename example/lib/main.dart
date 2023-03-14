@@ -15,6 +15,25 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         useMaterial3: true,
         colorSchemeSeed: Colors.blue,
+        // Set default theme like this
+        // extensions: [
+        //   SimpleLoadingDialogTheme(
+        //     dialogBuilder: (context) {
+        //       return AlertDialog(
+        //         content: Column(
+        //           mainAxisSize: MainAxisSize.min,
+        //           children: const [
+        //             SizedBox(height: 16),
+        //             CircularProgressIndicator(),
+        //             SizedBox(height: 16),
+        //             Text('Loading...'),
+        //             SizedBox(height: 16),
+        //           ],
+        //         ),
+        //       );
+        //     },
+        //   ),
+        // ],
       ),
       home: const DemoPage(),
     );

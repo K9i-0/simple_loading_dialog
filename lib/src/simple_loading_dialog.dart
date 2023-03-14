@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:simple_loading_dialog/src/simple_loading_dialog_theme.dart';
 
 Future<T> showSimpleLoadingDialog<T>({
   required BuildContext context,
@@ -8,16 +9,17 @@ Future<T> showSimpleLoadingDialog<T>({
   Widget Function(BuildContext context)? dialogBuilder,
   bool barrierDismissible = false,
 }) async {
+  final theme = Theme.of(context).extension<SimpleLoadingDialogTheme>();
+  final builder = dialogBuilder ??
+      theme?.dialogBuilder ??
+      (BuildContext context) => const Center(
+            child: CircularProgressIndicator(),
+          );
+
   showDialog(
     context: context,
     barrierDismissible: barrierDismissible,
-    builder: (BuildContext context) {
-      return dialogBuilder != null
-          ? dialogBuilder(context)
-          : const Center(
-              child: CircularProgressIndicator(),
-            );
-    },
+    builder: builder,
   );
 
   try {
