@@ -1,4 +1,4 @@
-## Unreleased patch
+## 0.3.0
 - improved comments and documentation (thanks to GPT-4)
 
 ## 0.2.0
