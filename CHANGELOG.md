@@ -1,3 +1,5 @@
+## 0.3.1
+- fix demo video path
 ## 0.3.0
 - improved comments and documentation (thanks to GPT-4)
 
