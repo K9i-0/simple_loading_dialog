@@ -64,14 +64,7 @@ class DemoPage extends StatelessWidget {
                   },
                 );
 
-                // TODO(K9i-0): check context.mounted
-                // ignore: use_build_context_synchronously
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('Success result: $result'),
-                    duration: const Duration(milliseconds: 500),
-                  ),
-                );
+                context.showMessageSnackBar('Success result: $result');
               },
               child: const Text('Show loading dialog'),
             ),
@@ -90,23 +83,9 @@ class DemoPage extends StatelessWidget {
                     },
                   );
 
-                  // TODO(K9i-0): check context.mounted
-                  // ignore: use_build_context_synchronously
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('Success result: $result'),
-                      duration: const Duration(milliseconds: 500),
-                    ),
-                  );
+                  context.showMessageSnackBar('Success result: $result');
                 } catch (e) {
-                  // TODO(K9i-0): check context.mounted
-                  // ignore: use_build_context_synchronously
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('Failed result: $e'),
-                      duration: const Duration(milliseconds: 500),
-                    ),
-                  );
+                  context.showMessageSnackBar('Failed result: $e');
                 }
               },
               child: const Text('Show loading dialog with error'),
@@ -140,19 +119,23 @@ class DemoPage extends StatelessWidget {
                   },
                 );
 
-                // TODO(K9i-0): check context.mounted
-                // ignore: use_build_context_synchronously
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('Success result: $result'),
-                    duration: const Duration(milliseconds: 500),
-                  ),
-                );
+                context.showMessageSnackBar('Success result: $result');
               },
               child: const Text('Show loading dialog with custom dialog'),
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+extension BuildContextX on BuildContext {
+  void showMessageSnackBar(String message) {
+    ScaffoldMessenger.of(this).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        duration: const Duration(milliseconds: 500),
       ),
     );
   }
