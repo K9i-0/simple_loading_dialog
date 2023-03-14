@@ -13,7 +13,8 @@ To use this package, add simple_progress_dialog as a dependency in your pubspec.
 
 ### Showing the dialog
 To show the dialog, use the showSimpleProgressDialog function.
-```
+
+```dart
 final result = showSimpleProgressDialog<String>(
   context: context,
   future: myFutureFunction,
@@ -24,7 +25,7 @@ This will show a full-screen progress dialog while waiting for the myFutureFunct
 ### Customizing the appearance
 The appearance of the dialog can be customized by passing a dialogBuilder.
 
-```
+```dart
 showSimpleProgressDialog<void>(
   context: context,
   future: myFutureFunction,
@@ -43,7 +44,8 @@ showSimpleProgressDialog<void>(
 
 ### Handling errors
 If an error occurs while waiting for the Future to complete, the exception will be rethrown. To handle the error, use a try-catch block.
-```
+
+```dart
 try {
   await showSimpleProgressDialog<void>(
     context: context,
