@@ -55,4 +55,4 @@ try {
 ```
 
 ## License
-This package is licensed under the MIT License. See the LICENSE file for details.
+This package is licensed under the MIT License. See the [LICENSE](https://github.com/K9i-0/simple_progress_dialog/blob/main/LICENSE) file for details.
