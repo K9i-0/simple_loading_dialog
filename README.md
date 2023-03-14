@@ -28,7 +28,7 @@ The appearance of the dialog can be customized by passing a dialogBuilder.
 showSimpleProgressDialog<void>(
   context: context,
   future: myFutureFunction,
-  dialogBuilder: AlertDialog(
+  dialogBuilder: (context) => AlertDialog(
     content: Column(
       mainAxisSize: MainAxisSize.min,
       children: [
