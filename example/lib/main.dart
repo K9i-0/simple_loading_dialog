@@ -50,6 +50,7 @@ class DemoPage extends StatelessWidget {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text('Success result: $result'),
+                    duration: const Duration(milliseconds: 500),
                   ),
                 );
               },
