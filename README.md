@@ -77,6 +77,14 @@ MaterialApp(
   ),
   home: MyHomePage(),
 );
+
+~~~
+
+final result = showSimpleLoadingDialog<String>(
+  context: context,
+  future: myFutureFunction,
+  message: "Saving...",
+);
 ```
 
 ### Handling errors
