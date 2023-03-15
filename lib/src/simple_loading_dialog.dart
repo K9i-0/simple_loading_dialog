@@ -28,7 +28,7 @@ Future<T> showSimpleLoadingDialog<T>({
   final theme = Theme.of(context).extension<SimpleLoadingDialogTheme>();
   final builder = dialogBuilder ??
       theme?.dialogBuilder ??
-      (BuildContext context, String message) => const Center(
+      (BuildContext dialogContext, String message) => const Center(
             child: CircularProgressIndicator(),
           );
 

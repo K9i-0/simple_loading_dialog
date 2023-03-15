@@ -130,6 +130,8 @@ class DemoPage extends StatelessWidget {
   }
 }
 
+// This function is used to display a snackbar at the bottom of the current screen.
+// It is called by the following code: context.showMessageSnackBar("Hello World");
 extension BuildContextX on BuildContext {
   void showMessageSnackBar(String message) {
     ScaffoldMessenger.of(this).showSnackBar(
