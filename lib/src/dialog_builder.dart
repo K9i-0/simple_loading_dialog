@@ -6,6 +6,6 @@ import 'package:flutter/material.dart';
 /// a BuildContext and a message string. It is used with the showSimpleLoadingDialog
 /// function to customize the appearance of the loading dialog.
 ///
-/// [context] is the BuildContext of the current widget tree.
+/// [context] is the BuildContext of the showDialog function's builder parameter.
 /// [message] is a String that represents the message to be displayed in the loading dialog.
 typedef DialogBuilder = Widget Function(BuildContext context, String message);
