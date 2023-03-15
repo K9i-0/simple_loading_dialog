@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:simple_loading_dialog/simple_loading_dialog.dart';
 
 /// A theme extension class for customizing the appearance of a SimpleLoadingDialog.
 ///
@@ -19,16 +20,16 @@ import 'package:flutter/material.dart';
 ///     colorSchemeSeed: Colors.blue,
 ///     extensions: [
 ///       SimpleLoadingDialogTheme(
-///         dialogBuilder: (context) {
+///         dialogBuilder: (context, message) {
 ///           return AlertDialog(
 ///             content: Column(
 ///               mainAxisSize: MainAxisSize.min,
-///               children: const [
-///                 SizedBox(height: 16),
-///                 CircularProgressIndicator(),
-///                 SizedBox(height: 16),
-///                 Text('Loading...'),
-///                 SizedBox(height: 16),
+///               children: [
+///                 const SizedBox(height: 16),
+///                 const CircularProgressIndicator(),
+///                 const SizedBox(height: 16),
+///                 Text(message),
+///                 const SizedBox(height: 16),
 ///               ],
 ///             ),
 ///           );
@@ -46,11 +47,11 @@ class SimpleLoadingDialogTheme
   SimpleLoadingDialogTheme({
     this.dialogBuilder,
   });
-  final Widget Function(BuildContext context)? dialogBuilder;
+  final DialogBuilder? dialogBuilder;
 
   @override
   ThemeExtension<SimpleLoadingDialogTheme> copyWith({
-    Widget Function(BuildContext context)? dialogBuilder,
+    DialogBuilder? dialogBuilder,
   }) {
     return SimpleLoadingDialogTheme(
       dialogBuilder: dialogBuilder ?? this.dialogBuilder,

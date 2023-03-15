@@ -35,7 +35,7 @@ The appearance of the dialog can be customized by passing a dialogBuilder.
 showSimpleLoadingDialog<void>(
   context: context,
   future: myFutureFunction,
-  dialogBuilder: (context) => AlertDialog(
+  dialogBuilder: (context, _) => AlertDialog(
     content: Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -58,16 +58,16 @@ MaterialApp(
     // Set default theme like this
     extensions: [
       SimpleLoadingDialogTheme(
-        dialogBuilder: (context) {
+        dialogBuilder: (context, message) {
           return AlertDialog(
             content: Column(
               mainAxisSize: MainAxisSize.min,
-              children: const [
-                SizedBox(height: 16),
-                CircularProgressIndicator(),
-                SizedBox(height: 16),
-                Text('Loading...'),
-                SizedBox(height: 16),
+              children: [
+                const SizedBox(height: 16),
+                const CircularProgressIndicator(),
+                const SizedBox(height: 16),
+                Text(message),
+                const SizedBox(height: 16),
               ],
             ),
           );

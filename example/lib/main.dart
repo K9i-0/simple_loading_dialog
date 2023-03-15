@@ -16,24 +16,24 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         colorSchemeSeed: Colors.blue,
         // Set default theme like this
-        // extensions: [
-        //   SimpleLoadingDialogTheme(
-        //     dialogBuilder: (context) {
-        //       return AlertDialog(
-        //         content: Column(
-        //           mainAxisSize: MainAxisSize.min,
-        //           children: const [
-        //             SizedBox(height: 16),
-        //             CircularProgressIndicator(),
-        //             SizedBox(height: 16),
-        //             Text('Loading...'),
-        //             SizedBox(height: 16),
-        //           ],
-        //         ),
-        //       );
-        //     },
-        //   ),
-        // ],
+        //   extensions: [
+        //     SimpleLoadingDialogTheme(
+        //       dialogBuilder: (context, message) {
+        //         return AlertDialog(
+        //           content: Column(
+        //             mainAxisSize: MainAxisSize.min,
+        //             children: [
+        //               const SizedBox(height: 16),
+        //               const CircularProgressIndicator(),
+        //               const SizedBox(height: 16),
+        //               Text(message),
+        //               const SizedBox(height: 16),
+        //             ],
+        //           ),
+        //         );
+        //       },
+        //     ),
+        //   ],
       ),
       home: const DemoPage(),
     );
@@ -103,7 +103,7 @@ class DemoPage extends StatelessWidget {
                     return 'World';
                   },
                   // Custom dialog
-                  dialogBuilder: (context) {
+                  dialogBuilder: (context, _) {
                     return AlertDialog(
                       content: Column(
                         mainAxisSize: MainAxisSize.min,

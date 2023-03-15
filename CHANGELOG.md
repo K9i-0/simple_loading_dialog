@@ -1,3 +1,6 @@
+## 0.4.0
+- Added support for passing a message parameter to the DialogBuilder function in the showSimpleLoadingDialog method, enabling the display of custom messages within the loading dialog.
+
 ## 0.3.2
 - fix SimpleLoadingDialogTheme's copyWith
 

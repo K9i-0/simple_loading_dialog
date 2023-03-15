@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:simple_loading_dialog/src/dialog_builder.dart';
 import 'package:simple_loading_dialog/src/simple_loading_dialog_theme.dart';
 
 /// Displays a simple loading dialog while waiting for a given Future to complete.
@@ -11,8 +12,8 @@ import 'package:simple_loading_dialog/src/simple_loading_dialog_theme.dart';
 ///
 /// [context] is the BuildContext of the current widget tree.
 /// [future] is a Future<T> Function() that represents the task to be completed.
-/// [dialogBuilder] is an optional Widget Function(BuildContext context) that returns
-/// a custom loading widget.
+/// [dialogBuilder] is an optional Widget Function(BuildContext context, String message) that returns
+/// [message] is an optional String that will be passed to the dialogBuilder.
 /// [barrierDismissible] is a bool that determines whether the dialog can be
 /// dismissed by the user or not.
 ///
@@ -20,20 +21,21 @@ import 'package:simple_loading_dialog/src/simple_loading_dialog_theme.dart';
 Future<T> showSimpleLoadingDialog<T>({
   required BuildContext context,
   required Future<T> Function() future,
-  Widget Function(BuildContext context)? dialogBuilder,
+  DialogBuilder? dialogBuilder,
+  String message = "Loading...",
   bool barrierDismissible = false,
 }) async {
   final theme = Theme.of(context).extension<SimpleLoadingDialogTheme>();
   final builder = dialogBuilder ??
       theme?.dialogBuilder ??
-      (BuildContext context) => const Center(
+      (BuildContext context, String message) => const Center(
             child: CircularProgressIndicator(),
           );
 
   showDialog(
     context: context,
     barrierDismissible: barrierDismissible,
-    builder: builder,
+    builder: (dialogContext) => builder(dialogContext, message),
   );
 
   try {
