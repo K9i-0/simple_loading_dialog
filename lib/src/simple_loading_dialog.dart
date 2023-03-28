@@ -40,9 +40,9 @@ Future<T> showSimpleLoadingDialog<T>({
 
   try {
     final result = await future();
-    // TODO(K9i-0): check context.mounted
-    // ignore: use_build_context_synchronously
-    Navigator.of(context).pop();
+    if (context.mounted) {
+      Navigator.of(context).pop();
+    }
     return result;
   } catch (e) {
     Navigator.of(context).pop();

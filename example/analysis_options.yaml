@@ -2,8 +2,3 @@ include: package:flutter_lints/flutter.yaml
 analyzer:
   errors:
       todo: ignore
-
-linter:
-  rules:
-    # TODO: Flutter update and remove it
-    use_build_context_synchronously: false

@@ -64,7 +64,9 @@ class DemoPage extends StatelessWidget {
                   },
                 );
 
-                context.showMessageSnackBar('Success result: $result');
+                if (context.mounted) {
+                  context.showMessageSnackBar('Success result: $result');
+                }
               },
               child: const Text('Show loading dialog'),
             ),
@@ -83,7 +85,9 @@ class DemoPage extends StatelessWidget {
                     },
                   );
 
-                  context.showMessageSnackBar('Success result: $result');
+                  if (context.mounted) {
+                    context.showMessageSnackBar('Success result: $result');
+                  }
                 } catch (e) {
                   context.showMessageSnackBar('Failed result: $e');
                 }
@@ -119,7 +123,9 @@ class DemoPage extends StatelessWidget {
                   },
                 );
 
-                context.showMessageSnackBar('Success result: $result');
+                if (context.mounted) {
+                  context.showMessageSnackBar('Success result: $result');
+                }
               },
               child: const Text('Show loading dialog with custom dialog'),
             ),

@@ -5,8 +5,8 @@ homepage: https://twitter.com/K9i_apps
 repository: https://github.com/K9i-0/simple_loading_dialog
 
 environment:
-  sdk: '>=2.18.2 <3.0.0'
-  flutter: ">=1.17.0"
+  sdk: '>=2.19.0 <3.0.0'
+  flutter: ">=3.7.0"
 
 dependencies:
   flutter:
