@@ -1,3 +1,7 @@
+## 0.5.0
+- updated to Flutter 3.7
+- added a check for context.mounted
+
 ## 0.4.1
 - update comments.
 
