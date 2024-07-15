@@ -1,3 +1,8 @@
+## 0.6.1
+
+- Added a new example demonstrating the use of a Result type with a custom wrapper function showSimpleLoadingDialogWithResult. This example shows how to handle success and failure cases more conveniently.
+- Updated README with usage examples for the Result type and instructions on implementing the showSimpleLoadingDialogWithResult function.
+
 ## 0.6.0
 
 - Consider nested Navigator context

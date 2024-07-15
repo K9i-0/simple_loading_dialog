@@ -131,6 +131,35 @@ class DemoPage extends StatelessWidget {
               },
               child: const Text('Show loading dialog with custom dialog'),
             ),
+            const SizedBox(
+              height: 32,
+            ),
+
+            // Optional: Show loading dialog with result
+            ElevatedButton(
+              onPressed: () async {
+                final result = await showSimpleLoadingDialogWithResult<String>(
+                  context: context,
+                  future: () async {
+                    await Future<void>.delayed(const Duration(seconds: 1));
+                    // return 'Hello';
+                    throw Exception('Error');
+                  },
+                );
+
+                if (context.mounted) {
+                  switch (result) {
+                    case Success():
+                      context.showMessageSnackBar(
+                          'Success result: ${result.value}');
+                    case Failure():
+                      context.showMessageSnackBar(
+                          'Failed result: ${result.error}');
+                  }
+                }
+              },
+              child: const Text('Optional: Show loading dialog with result'),
+            ),
           ],
         ),
       ),
@@ -149,4 +178,47 @@ extension BuildContextX on BuildContext {
       ),
     );
   }
+}
+
+/// Optional: You can define a wrapper function to show a loading dialog with a result.
+///
+/// Alternative to [showSimpleLoadingDialog] that returns a [SLDResult] object
+Future<Result<T>> showSimpleLoadingDialogWithResult<T>({
+  required BuildContext context,
+  required Future<T> Function() future,
+  DialogBuilder? dialogBuilder,
+  String message = 'Loading...',
+  bool barrierDismissible = false,
+}) async {
+  try {
+    final res = await showSimpleLoadingDialog(
+      context: context,
+      future: future,
+      dialogBuilder: dialogBuilder,
+      message: message,
+      barrierDismissible: barrierDismissible,
+    );
+
+    return Success(value: res);
+    // ignore: avoid_catches_without_on_clauses
+  } catch (err, stack) {
+    return Failure(error: err, stackTrace: stack);
+  }
+}
+
+sealed class Result<T> {
+  const Result();
+}
+
+class Success<T> extends Result<T> {
+  const Success({required this.value});
+
+  final T value;
+}
+
+class Failure<T> extends Result<T> {
+  const Failure({required this.error, this.stackTrace});
+
+  final Object error;
+  final StackTrace? stackTrace;
 }

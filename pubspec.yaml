@@ -1,6 +1,6 @@
 name: simple_loading_dialog
 description: "SimpleLoadingDialog: A seamless full-screen loading dialog for Flutter. Efficiently manage actions while awaiting Futures, and easily customize with Widgets and ThemeExtension."
-version: 0.6.0
+version: 0.6.1
 homepage: https://twitter.com/K9i_apps
 repository: https://github.com/K9i-0/simple_loading_dialog
 
