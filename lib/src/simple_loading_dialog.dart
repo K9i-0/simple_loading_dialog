@@ -32,20 +32,20 @@ Future<T> showSimpleLoadingDialog<T>({
             child: CircularProgressIndicator(),
           );
 
-  showDialog(
-    context: context,
-    barrierDismissible: barrierDismissible,
-    builder: (dialogContext) => builder(dialogContext, message),
+  unawaited(
+    showDialog(
+      context: context,
+      barrierDismissible: barrierDismissible,
+      builder: (dialogContext) => builder(dialogContext, message),
+    ),
   );
 
   try {
     final result = await future();
+    return result;
+  } finally {
     if (context.mounted) {
       Navigator.of(context).pop();
     }
-    return result;
-  } catch (e) {
-    Navigator.of(context).pop();
-    rethrow;
   }
 }

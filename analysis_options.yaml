@@ -8,4 +8,4 @@ analyzer:
       todo: ignore
 linter:
   rules:
-    always_use_package_imports: true
+    lines_longer_than_80_chars: false

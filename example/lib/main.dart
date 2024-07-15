@@ -89,7 +89,9 @@ class DemoPage extends StatelessWidget {
                     context.showMessageSnackBar('Success result: $result');
                   }
                 } catch (e) {
-                  context.showMessageSnackBar('Failed result: $e');
+                  if (context.mounted) {
+                    context.showMessageSnackBar('Failed result: $e');
+                  }
                 }
               },
               child: const Text('Show loading dialog with error'),
