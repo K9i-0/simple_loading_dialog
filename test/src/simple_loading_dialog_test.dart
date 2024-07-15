@@ -40,346 +40,352 @@ void main() {
     );
   }
 
-  testWidgets(
-      'Given a future that completes successfully, when showSimpleLoadingDialog is called, then the dialog is shown and hides on future completion',
-      (tester) async {
-    // Given a future that completes successfully
-    final completer = Completer<String>();
+  group('Standard Cases', () {
+    testWidgets(
+        'Given a future that completes successfully, when showSimpleLoadingDialog is called, then the dialog is shown and hides on future completion',
+        (tester) async {
+      // Given a future that completes successfully
+      final completer = Completer<String>();
 
-    // Given the widget is built
-    await tester.pumpWidget(
-      buildTestApp(
-        onPressed: (context) async {
-          try {
-            // When showSimpleLoadingDialog is called
-            actualResult = await showSimpleLoadingDialog<String>(
-              context: context,
-              future: () => completer.future,
-            );
-          } on Exception {
-            caughtError = true;
-          }
-        },
-      ),
-    );
-
-    // When the button is tapped
-    await tester.tap(find.text('Show Dialog'));
-    await tester.pump(); // Start the dialog animation
-
-    // Then the dialog is shown
-    expect(find.byType(CircularProgressIndicator), findsOneWidget);
-
-    // When the future completes
-    completer.complete('Success');
-    await tester.pumpAndSettle(); // Wait for all animations to finish
-
-    // Then the dialog is hidden
-    expect(find.byType(CircularProgressIndicator), findsNothing);
-
-    // And the result is returned
-    expect(actualResult, 'Success');
-
-    // And no error is caught
-    expect(caughtError, isFalse);
-  });
-
-  testWidgets(
-      'Given a future that completes with an error, when showSimpleLoadingDialog is called, then the dialog is shown and hides on future error',
-      (tester) async {
-    // Given a future that completes with an error
-    final completer = Completer<String>();
-
-    // Given the widget is built
-    await tester.pumpWidget(
-      buildTestApp(
-        onPressed: (context) async {
-          try {
-            // When showSimpleLoadingDialog is called
-            actualResult = await showSimpleLoadingDialog<String>(
-              context: context,
-              future: () => completer.future,
-            );
-          } on Exception {
-            caughtError = true;
-          }
-        },
-      ),
-    );
-
-    // When the button is tapped
-    await tester.tap(find.text('Show Dialog'));
-    await tester.pump(); // Start the dialog animation
-
-    // Then the dialog is shown
-    expect(find.byType(CircularProgressIndicator), findsOneWidget);
-
-    // When the future completes with an error
-    completer.completeError(Exception('Error'));
-    await tester.pumpAndSettle(); // Wait for all animations to finish
-
-    // Then the dialog is hidden
-    expect(find.byType(CircularProgressIndicator), findsNothing);
-
-    // And the result is not set
-    expect(actualResult, '');
-
-    // And the error is caught
-    expect(caughtError, isTrue);
-  });
-
-  testWidgets(
-      'Given a custom dialogBuilder, when showSimpleLoadingDialog is called, then the custom dialog is shown',
-      (tester) async {
-    // Given a future that completes after a short delay
-    final completer = Completer<String>();
-
-    // Custom dialog builder
-    Widget customDialogBuilder(BuildContext context, String message) {
-      return AlertDialog(
-        content: Text('Custom Dialog: $message'),
-      );
-    }
-
-    // Given the widget is built
-    await tester.pumpWidget(
-      buildTestApp(
-        onPressed: (context) async {
-          try {
-            // When showSimpleLoadingDialog is called
-            actualResult = await showSimpleLoadingDialog<String>(
-              context: context,
-              future: () => completer.future,
-              dialogBuilder: customDialogBuilder,
-            );
-          } on Exception {
-            caughtError = true;
-          }
-        },
-      ),
-    );
-
-    // When the button is tapped
-    await tester.tap(find.text('Show Dialog'));
-    await tester.pump(); // Start the dialog animation
-
-    // Then the custom dialog is shown
-    expect(find.text('Custom Dialog: Loading...'), findsOneWidget);
-
-    // Complete the future
-    completer.complete('Success');
-    await tester.pumpAndSettle(); // Wait for all animations to finish
-
-    // Then the dialog is hidden
-    expect(find.text('Custom Dialog: Loading...'), findsNothing);
-
-    // And the result is returned
-    expect(actualResult, 'Success');
-  });
-
-  testWidgets(
-      'Given a dialogBuilder in SimpleLoadingDialogTheme, when showSimpleLoadingDialog is called, then the custom dialog from theme is shown',
-      (tester) async {
-    // Given a future that completes after a short delay
-    final completer = Completer<String>();
-
-    // Custom dialog builder provided through theme extension
-    Widget customDialogBuilder(BuildContext context, String message) {
-      return AlertDialog(
-        content: Text('Theme Custom Dialog: $message'),
-      );
-    }
-
-    // Given the widget with the theme extension is built
-    await tester.pumpWidget(
-      buildTestApp(
-        onPressed: (context) async {
-          try {
-            // When showSimpleLoadingDialog is called
-            actualResult = await showSimpleLoadingDialog<String>(
-              context: context,
-              future: () => completer.future,
-            );
-          } on Exception {
-            caughtError = true;
-          }
-        },
-        themeExtension: SimpleLoadingDialogTheme(
-          dialogBuilder: customDialogBuilder,
+      // Given the widget is built
+      await tester.pumpWidget(
+        buildTestApp(
+          onPressed: (context) async {
+            try {
+              // When showSimpleLoadingDialog is called
+              actualResult = await showSimpleLoadingDialog<String>(
+                context: context,
+                future: () => completer.future,
+              );
+            } on Exception {
+              caughtError = true;
+            }
+          },
         ),
-      ),
-    );
-
-    // When the button is tapped
-    await tester.tap(find.text('Show Dialog'));
-    await tester.pump(); // Start the dialog animation
-
-    // Then the custom dialog from the theme is shown
-    expect(find.text('Theme Custom Dialog: Loading...'), findsOneWidget);
-
-    // Complete the future
-    completer.complete('Success');
-    await tester.pumpAndSettle(); // Wait for all animations to finish
-
-    // Then the dialog is hidden
-    expect(find.text('Theme Custom Dialog: Loading...'), findsNothing);
-
-    // And the result is returned
-    expect(actualResult, 'Success');
-  });
-
-  testWidgets(
-      'Given both a dialogBuilder in SimpleLoadingDialogTheme and a dialogBuilder as an argument, when showSimpleLoadingDialog is called, then the argument dialogBuilder is used',
-      (tester) async {
-    // Given a future that completes after a short delay
-    final completer = Completer<String>();
-
-    // Custom dialog builder provided through theme extension
-    Widget themeDialogBuilder(BuildContext context, String message) {
-      return AlertDialog(
-        content: Text('Theme Custom Dialog: $message'),
       );
-    }
 
-    // Custom dialog builder provided through argument
-    Widget argumentDialogBuilder(BuildContext context, String message) {
-      return AlertDialog(
-        content: Text('Argument Custom Dialog: $message'),
-      );
-    }
+      // When the button is tapped
+      await tester.tap(find.text('Show Dialog'));
+      await tester.pump(); // Start the dialog animation
 
-    // Given the widget with the theme extension is built
-    await tester.pumpWidget(
-      buildTestApp(
-        onPressed: (context) async {
-          try {
-            // When showSimpleLoadingDialog is called
-            actualResult = await showSimpleLoadingDialog<String>(
-              context: context,
-              future: () => completer.future,
-              dialogBuilder: argumentDialogBuilder,
-            );
-          } on Exception {
-            caughtError = true;
-          }
-        },
-        themeExtension: SimpleLoadingDialogTheme(
-          dialogBuilder: themeDialogBuilder,
+      // Then the dialog is shown
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+
+      // When the future completes
+      completer.complete('Success');
+      await tester.pumpAndSettle(); // Wait for all animations to finish
+
+      // Then the dialog is hidden
+      expect(find.byType(CircularProgressIndicator), findsNothing);
+
+      // And the result is returned
+      expect(actualResult, 'Success');
+
+      // And no error is caught
+      expect(caughtError, isFalse);
+    });
+
+    testWidgets(
+        'Given a future that completes with an error, when showSimpleLoadingDialog is called, then the dialog is shown and hides on future error',
+        (tester) async {
+      // Given a future that completes with an error
+      final completer = Completer<String>();
+
+      // Given the widget is built
+      await tester.pumpWidget(
+        buildTestApp(
+          onPressed: (context) async {
+            try {
+              // When showSimpleLoadingDialog is called
+              actualResult = await showSimpleLoadingDialog<String>(
+                context: context,
+                future: () => completer.future,
+              );
+            } on Exception {
+              caughtError = true;
+            }
+          },
         ),
-      ),
-    );
+      );
 
-    // When the button is tapped
-    await tester.tap(find.text('Show Dialog'));
-    await tester.pump(); // Start the dialog animation
+      // When the button is tapped
+      await tester.tap(find.text('Show Dialog'));
+      await tester.pump(); // Start the dialog animation
 
-    // Then the custom dialog from the argument is shown
-    expect(find.text('Argument Custom Dialog: Loading...'), findsOneWidget);
+      // Then the dialog is shown
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
 
-    // Verify the theme dialog is not shown
-    expect(find.text('Theme Custom Dialog: Loading...'), findsNothing);
+      // When the future completes with an error
+      completer.completeError(Exception('Error'));
+      await tester.pumpAndSettle(); // Wait for all animations to finish
 
-    // Complete the future
-    completer.complete('Success');
-    await tester.pumpAndSettle(); // Wait for all animations to finish
+      // Then the dialog is hidden
+      expect(find.byType(CircularProgressIndicator), findsNothing);
 
-    // Then the dialog is hidden
-    expect(find.text('Argument Custom Dialog: Loading...'), findsNothing);
+      // And the result is not set
+      expect(actualResult, '');
 
-    // And the result is returned
-    expect(actualResult, 'Success');
+      // And the error is caught
+      expect(caughtError, isTrue);
+    });
   });
 
-  Widget buildTestNestedApp({
-    required void Function(BuildContext) onPressed,
-    SimpleLoadingDialogTheme? themeExtension,
-  }) {
-    return MaterialApp(
-      theme: themeExtension != null
-          ? ThemeData(
-              extensions: [
-                themeExtension,
-              ],
-            )
-          : ThemeData(),
-      home: _MyHomePage(onPressed: onPressed),
-    );
-  }
+  group('Custom DialogBuilder Cases', () {
+    testWidgets(
+        'Given a custom dialogBuilder, when showSimpleLoadingDialog is called, then the custom dialog is shown',
+        (tester) async {
+      // Given a future that completes after a short delay
+      final completer = Completer<String>();
 
-  testWidgets(
-      'Given a future that completes successfully with nested Navigator, when showSimpleLoadingDialog is called, then the dialog is shown and hides on future completion',
-      (tester) async {
-    final completer = Completer<String>();
-    var actualResult = '';
+      // Custom dialog builder
+      Widget customDialogBuilder(BuildContext context, String message) {
+        return AlertDialog(
+          content: Text('Custom Dialog: $message'),
+        );
+      }
 
-    await tester.pumpWidget(
-      buildTestNestedApp(
-        onPressed: (context) async {
-          actualResult = await showSimpleLoadingDialog<String>(
-            context: context,
-            future: () => completer.future,
-          );
-        },
-      ),
-    );
+      // Given the widget is built
+      await tester.pumpWidget(
+        buildTestApp(
+          onPressed: (context) async {
+            try {
+              // When showSimpleLoadingDialog is called
+              actualResult = await showSimpleLoadingDialog<String>(
+                context: context,
+                future: () => completer.future,
+                dialogBuilder: customDialogBuilder,
+              );
+            } on Exception {
+              caughtError = true;
+            }
+          },
+        ),
+      );
 
-    // Navigate to the second tab to create a nested navigator scenario
-    await tester.tap(find.text('Tab 2'));
-    await tester.pumpAndSettle();
+      // When the button is tapped
+      await tester.tap(find.text('Show Dialog'));
+      await tester.pump(); // Start the dialog animation
 
-    // Tap the button to show the dialog
-    await tester.tap(find.text('Show Dialog'));
-    await tester.pump(); // Start the dialog animation
+      // Then the custom dialog is shown
+      expect(find.text('Custom Dialog: Loading...'), findsOneWidget);
 
-    expect(find.byType(CircularProgressIndicator), findsOneWidget);
+      // Complete the future
+      completer.complete('Success');
+      await tester.pumpAndSettle(); // Wait for all animations to finish
 
-    completer.complete('Success');
-    await tester.pump(); // Give time for the completer to complete
-    await tester.pumpAndSettle(); // Wait for all animations to finish
+      // Then the dialog is hidden
+      expect(find.text('Custom Dialog: Loading...'), findsNothing);
 
-    expect(find.byType(CircularProgressIndicator), findsNothing);
-    expect(actualResult, 'Success');
+      // And the result is returned
+      expect(actualResult, 'Success');
+    });
+
+    testWidgets(
+        'Given a dialogBuilder in SimpleLoadingDialogTheme, when showSimpleLoadingDialog is called, then the custom dialog from theme is shown',
+        (tester) async {
+      // Given a future that completes after a short delay
+      final completer = Completer<String>();
+
+      // Custom dialog builder provided through theme extension
+      Widget customDialogBuilder(BuildContext context, String message) {
+        return AlertDialog(
+          content: Text('Theme Custom Dialog: $message'),
+        );
+      }
+
+      // Given the widget with the theme extension is built
+      await tester.pumpWidget(
+        buildTestApp(
+          onPressed: (context) async {
+            try {
+              // When showSimpleLoadingDialog is called
+              actualResult = await showSimpleLoadingDialog<String>(
+                context: context,
+                future: () => completer.future,
+              );
+            } on Exception {
+              caughtError = true;
+            }
+          },
+          themeExtension: SimpleLoadingDialogTheme(
+            dialogBuilder: customDialogBuilder,
+          ),
+        ),
+      );
+
+      // When the button is tapped
+      await tester.tap(find.text('Show Dialog'));
+      await tester.pump(); // Start the dialog animation
+
+      // Then the custom dialog from the theme is shown
+      expect(find.text('Theme Custom Dialog: Loading...'), findsOneWidget);
+
+      // Complete the future
+      completer.complete('Success');
+      await tester.pumpAndSettle(); // Wait for all animations to finish
+
+      // Then the dialog is hidden
+      expect(find.text('Theme Custom Dialog: Loading...'), findsNothing);
+
+      // And the result is returned
+      expect(actualResult, 'Success');
+    });
+
+    testWidgets(
+        'Given both a dialogBuilder in SimpleLoadingDialogTheme and a dialogBuilder as an argument, when showSimpleLoadingDialog is called, then the argument dialogBuilder is used',
+        (tester) async {
+      // Given a future that completes after a short delay
+      final completer = Completer<String>();
+
+      // Custom dialog builder provided through theme extension
+      Widget themeDialogBuilder(BuildContext context, String message) {
+        return AlertDialog(
+          content: Text('Theme Custom Dialog: $message'),
+        );
+      }
+
+      // Custom dialog builder provided through argument
+      Widget argumentDialogBuilder(BuildContext context, String message) {
+        return AlertDialog(
+          content: Text('Argument Custom Dialog: $message'),
+        );
+      }
+
+      // Given the widget with the theme extension is built
+      await tester.pumpWidget(
+        buildTestApp(
+          onPressed: (context) async {
+            try {
+              // When showSimpleLoadingDialog is called
+              actualResult = await showSimpleLoadingDialog<String>(
+                context: context,
+                future: () => completer.future,
+                dialogBuilder: argumentDialogBuilder,
+              );
+            } on Exception {
+              caughtError = true;
+            }
+          },
+          themeExtension: SimpleLoadingDialogTheme(
+            dialogBuilder: themeDialogBuilder,
+          ),
+        ),
+      );
+
+      // When the button is tapped
+      await tester.tap(find.text('Show Dialog'));
+      await tester.pump(); // Start the dialog animation
+
+      // Then the custom dialog from the argument is shown
+      expect(find.text('Argument Custom Dialog: Loading...'), findsOneWidget);
+
+      // Verify the theme dialog is not shown
+      expect(find.text('Theme Custom Dialog: Loading...'), findsNothing);
+
+      // Complete the future
+      completer.complete('Success');
+      await tester.pumpAndSettle(); // Wait for all animations to finish
+
+      // Then the dialog is hidden
+      expect(find.text('Argument Custom Dialog: Loading...'), findsNothing);
+
+      // And the result is returned
+      expect(actualResult, 'Success');
+    });
   });
 
-  testWidgets(
-      'Given a future that completes with an error with nested Navigator, when showSimpleLoadingDialog is called, then the dialog is shown and hides on future error',
-      (tester) async {
-    final completer = Completer<String>();
-    var actualResult = '';
-    var caughtError = false;
+  group('Nested Navigator Cases', () {
+    Widget buildTestNestedApp({
+      required void Function(BuildContext) onPressed,
+      SimpleLoadingDialogTheme? themeExtension,
+    }) {
+      return MaterialApp(
+        theme: themeExtension != null
+            ? ThemeData(
+                extensions: [
+                  themeExtension,
+                ],
+              )
+            : ThemeData(),
+        home: _MyHomePage(onPressed: onPressed),
+      );
+    }
 
-    await tester.pumpWidget(
-      buildTestNestedApp(
-        onPressed: (context) async {
-          try {
+    testWidgets(
+        'Given a future that completes successfully with nested Navigator, when showSimpleLoadingDialog is called, then the dialog is shown and hides on future completion',
+        (tester) async {
+      final completer = Completer<String>();
+      var actualResult = '';
+
+      await tester.pumpWidget(
+        buildTestNestedApp(
+          onPressed: (context) async {
             actualResult = await showSimpleLoadingDialog<String>(
               context: context,
               future: () => completer.future,
             );
-          } on Exception {
-            caughtError = true;
-          }
-        },
-      ),
-    );
+          },
+        ),
+      );
 
-    // Navigate to the second tab to create a nested navigator scenario
-    await tester.tap(find.text('Tab 2'));
-    await tester.pumpAndSettle();
+      // Navigate to the second tab to create a nested navigator scenario
+      await tester.tap(find.text('Tab 2'));
+      await tester.pumpAndSettle();
 
-    // Tap the button to show the dialog
-    await tester.tap(find.text('Show Dialog'));
-    await tester.pump(); // Start the dialog animation
+      // Tap the button to show the dialog
+      await tester.tap(find.text('Show Dialog'));
+      await tester.pump(); // Start the dialog animation
 
-    expect(find.byType(CircularProgressIndicator), findsOneWidget);
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
 
-    completer.completeError(Exception('Error'));
-    await tester.pump(); // Give time for the completer to complete
-    await tester.pumpAndSettle(); // Wait for all animations to finish
+      completer.complete('Success');
+      await tester.pump(); // Give time for the completer to complete
+      await tester.pumpAndSettle(); // Wait for all animations to finish
 
-    expect(find.byType(CircularProgressIndicator), findsNothing);
-    expect(actualResult, '');
-    expect(caughtError, isTrue);
+      expect(find.byType(CircularProgressIndicator), findsNothing);
+      expect(actualResult, 'Success');
+    });
+
+    testWidgets(
+        'Given a future that completes with an error with nested Navigator, when showSimpleLoadingDialog is called, then the dialog is shown and hides on future error',
+        (tester) async {
+      final completer = Completer<String>();
+      var actualResult = '';
+      var caughtError = false;
+
+      await tester.pumpWidget(
+        buildTestNestedApp(
+          onPressed: (context) async {
+            try {
+              actualResult = await showSimpleLoadingDialog<String>(
+                context: context,
+                future: () => completer.future,
+              );
+            } on Exception {
+              caughtError = true;
+            }
+          },
+        ),
+      );
+
+      // Navigate to the second tab to create a nested navigator scenario
+      await tester.tap(find.text('Tab 2'));
+      await tester.pumpAndSettle();
+
+      // Tap the button to show the dialog
+      await tester.tap(find.text('Show Dialog'));
+      await tester.pump(); // Start the dialog animation
+
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+
+      completer.completeError(Exception('Error'));
+      await tester.pump(); // Give time for the completer to complete
+      await tester.pumpAndSettle(); // Wait for all animations to finish
+
+      expect(find.byType(CircularProgressIndicator), findsNothing);
+      expect(actualResult, '');
+      expect(caughtError, isTrue);
+    });
   });
 }
 
