@@ -37,15 +37,15 @@ jobs:
       - name: Check format
         run: dart format --set-exit-if-changed .
 
-      - name: Run test
-        run: flutter test --no-pub --machine > test_report.log
-        continue-on-error: true
+      - name: Test
+        run: |
+          flutter test --machine > test_report.log
 
-      # https://github.com/dorny/test-reporter
-      - name: Report test
+      - name: Test Report
         uses: dorny/test-reporter@v1
+        if: always()
         with:
           name: 'flutter test'
           path: 'test_report.log'
           reporter: 'flutter-json'
-          fail-on-error: 'true'
+          fail-on-error: 'false'
