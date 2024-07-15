@@ -31,12 +31,16 @@ Future<T> showSimpleLoadingDialog<T>({
       (dialogContext, message) => const Center(
             child: CircularProgressIndicator(),
           );
+  BuildContext? popContext;
 
   unawaited(
     showDialog(
       context: context,
       barrierDismissible: barrierDismissible,
-      builder: (dialogContext) => builder(dialogContext, message),
+      builder: (dialogContext) {
+        popContext = dialogContext;
+        return builder(dialogContext, message);
+      },
     ),
   );
 
@@ -44,7 +48,10 @@ Future<T> showSimpleLoadingDialog<T>({
     final result = await future();
     return result;
   } finally {
-    if (context.mounted) {
+    // Consider nested Navigator context
+    if (popContext != null && popContext!.mounted) {
+      Navigator.of(popContext!).pop();
+    } else if (context.mounted) {
       Navigator.of(context).pop();
     }
   }
