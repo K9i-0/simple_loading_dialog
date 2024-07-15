@@ -5,39 +5,61 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:simple_loading_dialog/simple_loading_dialog.dart';
 
 void main() {
+  late String actualResult;
+  late bool caughtError;
+
+  setUp(() {
+    actualResult = '';
+    caughtError = false;
+  });
+
+  Widget buildTestApp({
+    required void Function(BuildContext) onPressed,
+    SimpleLoadingDialogTheme? themeExtension,
+  }) {
+    return MaterialApp(
+      theme: themeExtension != null
+          ? ThemeData(
+              extensions: [
+                themeExtension,
+              ],
+            )
+          : ThemeData(),
+      home: Builder(
+        builder: (context) {
+          return Scaffold(
+            body: Center(
+              child: ElevatedButton(
+                onPressed: () => onPressed(context),
+                child: const Text('Show Dialog'),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
   testWidgets(
       'Given a future that completes successfully, when showSimpleLoadingDialog is called, then the dialog is shown and hides on future completion',
       (tester) async {
     // Given a future that completes successfully
     final completer = Completer<String>();
-    var actualResult = '';
-    var caughtError = false;
 
     // Given the widget is built
     await tester.pumpWidget(
-      MaterialApp(
-        home: Builder(
-          builder: (context) {
-            return Scaffold(
-              body: Center(
-                child: ElevatedButton(
-                  onPressed: () async {
-                    try {
-                      // When showSimpleLoadingDialog is called
-                      actualResult = await showSimpleLoadingDialog<String>(
-                        context: context,
-                        future: () => completer.future,
-                      );
-                    } on Exception {
-                      caughtError = true;
-                    }
-                  },
-                  child: const Text('Show Dialog'),
-                ),
-              ),
+      buildTestApp(
+        onPressed: (context) async {
+          try {
+            // When showSimpleLoadingDialog is called
+            actualResult = await showSimpleLoadingDialog<String>(
+              context: context,
+              future: () => completer.future,
             );
-          },
-        ),
+          } on Exception {
+            caughtError = true;
+          }
+        },
       ),
     );
 
@@ -67,34 +89,21 @@ void main() {
       (tester) async {
     // Given a future that completes with an error
     final completer = Completer<String>();
-    var actualResult = '';
-    var caughtError = false;
 
     // Given the widget is built
     await tester.pumpWidget(
-      MaterialApp(
-        home: Builder(
-          builder: (context) {
-            return Scaffold(
-              body: Center(
-                child: ElevatedButton(
-                  onPressed: () async {
-                    try {
-                      // When showSimpleLoadingDialog is called
-                      actualResult = await showSimpleLoadingDialog<String>(
-                        context: context,
-                        future: () => completer.future,
-                      );
-                    } on Exception {
-                      caughtError = true;
-                    }
-                  },
-                  child: const Text('Show Dialog'),
-                ),
-              ),
+      buildTestApp(
+        onPressed: (context) async {
+          try {
+            // When showSimpleLoadingDialog is called
+            actualResult = await showSimpleLoadingDialog<String>(
+              context: context,
+              future: () => completer.future,
             );
-          },
-        ),
+          } on Exception {
+            caughtError = true;
+          }
+        },
       ),
     );
 
@@ -124,7 +133,6 @@ void main() {
       (tester) async {
     // Given a future that completes after a short delay
     final completer = Completer<String>();
-    var actualResult = '';
 
     // Custom dialog builder
     Widget customDialogBuilder(BuildContext context, String message) {
@@ -135,26 +143,19 @@ void main() {
 
     // Given the widget is built
     await tester.pumpWidget(
-      MaterialApp(
-        home: Builder(
-          builder: (context) {
-            return Scaffold(
-              body: Center(
-                child: ElevatedButton(
-                  onPressed: () async {
-                    // When showSimpleLoadingDialog is called
-                    actualResult = await showSimpleLoadingDialog<String>(
-                      context: context,
-                      future: () => completer.future,
-                      dialogBuilder: customDialogBuilder,
-                    );
-                  },
-                  child: const Text('Show Dialog'),
-                ),
-              ),
+      buildTestApp(
+        onPressed: (context) async {
+          try {
+            // When showSimpleLoadingDialog is called
+            actualResult = await showSimpleLoadingDialog<String>(
+              context: context,
+              future: () => completer.future,
+              dialogBuilder: customDialogBuilder,
             );
-          },
-        ),
+          } on Exception {
+            caughtError = true;
+          }
+        },
       ),
     );
 
@@ -181,7 +182,6 @@ void main() {
       (tester) async {
     // Given a future that completes after a short delay
     final completer = Completer<String>();
-    var actualResult = '';
 
     // Custom dialog builder provided through theme extension
     Widget customDialogBuilder(BuildContext context, String message) {
@@ -192,31 +192,20 @@ void main() {
 
     // Given the widget with the theme extension is built
     await tester.pumpWidget(
-      MaterialApp(
-        theme: ThemeData(
-          extensions: [
-            SimpleLoadingDialogTheme(
-              dialogBuilder: customDialogBuilder,
-            ),
-          ],
-        ),
-        home: Builder(
-          builder: (context) {
-            return Scaffold(
-              body: Center(
-                child: ElevatedButton(
-                  onPressed: () async {
-                    // When showSimpleLoadingDialog is called
-                    actualResult = await showSimpleLoadingDialog<String>(
-                      context: context,
-                      future: () => completer.future,
-                    );
-                  },
-                  child: const Text('Show Dialog'),
-                ),
-              ),
+      buildTestApp(
+        onPressed: (context) async {
+          try {
+            // When showSimpleLoadingDialog is called
+            actualResult = await showSimpleLoadingDialog<String>(
+              context: context,
+              future: () => completer.future,
             );
-          },
+          } on Exception {
+            caughtError = true;
+          }
+        },
+        themeExtension: SimpleLoadingDialogTheme(
+          dialogBuilder: customDialogBuilder,
         ),
       ),
     );
@@ -244,7 +233,6 @@ void main() {
       (tester) async {
     // Given a future that completes after a short delay
     final completer = Completer<String>();
-    var actualResult = '';
 
     // Custom dialog builder provided through theme extension
     Widget themeDialogBuilder(BuildContext context, String message) {
@@ -262,32 +250,21 @@ void main() {
 
     // Given the widget with the theme extension is built
     await tester.pumpWidget(
-      MaterialApp(
-        theme: ThemeData(
-          extensions: [
-            SimpleLoadingDialogTheme(
-              dialogBuilder: themeDialogBuilder,
-            ),
-          ],
-        ),
-        home: Builder(
-          builder: (context) {
-            return Scaffold(
-              body: Center(
-                child: ElevatedButton(
-                  onPressed: () async {
-                    // When showSimpleLoadingDialog is called
-                    actualResult = await showSimpleLoadingDialog<String>(
-                      context: context,
-                      future: () => completer.future,
-                      dialogBuilder: argumentDialogBuilder,
-                    );
-                  },
-                  child: const Text('Show Dialog'),
-                ),
-              ),
+      buildTestApp(
+        onPressed: (context) async {
+          try {
+            // When showSimpleLoadingDialog is called
+            actualResult = await showSimpleLoadingDialog<String>(
+              context: context,
+              future: () => completer.future,
+              dialogBuilder: argumentDialogBuilder,
             );
-          },
+          } on Exception {
+            caughtError = true;
+          }
+        },
+        themeExtension: SimpleLoadingDialogTheme(
+          dialogBuilder: themeDialogBuilder,
         ),
       ),
     );
