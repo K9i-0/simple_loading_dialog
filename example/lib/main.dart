@@ -182,7 +182,7 @@ extension BuildContextX on BuildContext {
 
 /// Optional: You can define a wrapper function to show a loading dialog with a result.
 ///
-/// Alternative to [showSimpleLoadingDialog] that returns a [SLDResult] object
+/// Alternative to [showSimpleLoadingDialog] that returns a [Result] object
 Future<Result<T>> showSimpleLoadingDialogWithResult<T>({
   required BuildContext context,
   required Future<T> Function() future,
