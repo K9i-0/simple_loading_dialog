@@ -10,7 +10,7 @@ void main() {
       (tester) async {
     // Setup a future that completes after a short delay
     final completer = Completer<String>();
-    var result = '';
+    var actualResult = '';
     var caughtError = false;
 
     // Build our app and trigger a frame
@@ -23,7 +23,7 @@ void main() {
                 child: ElevatedButton(
                   onPressed: () async {
                     try {
-                      result = await showSimpleLoadingDialog<String>(
+                      actualResult = await showSimpleLoadingDialog<String>(
                         context: context,
                         future: () => completer.future,
                       );
@@ -55,9 +55,9 @@ void main() {
     expect(find.byType(CircularProgressIndicator), findsNothing);
 
     // Verify the result
-    expect(result, 'Success');
+    expect(actualResult, 'Success');
 
-    // Verify the error was caught
+    // Verify the error was not caught
     expect(caughtError, isFalse);
   });
 
@@ -66,7 +66,7 @@ void main() {
       (tester) async {
     // Setup a future that completes with an error
     final completer = Completer<String>();
-    var result = '';
+    var actualResult = '';
     var caughtError = false;
 
     // Build our app and trigger a frame
@@ -79,7 +79,7 @@ void main() {
                 child: ElevatedButton(
                   onPressed: () async {
                     try {
-                      result = await showSimpleLoadingDialog<String>(
+                      actualResult = await showSimpleLoadingDialog<String>(
                         context: context,
                         future: () => completer.future,
                       );
@@ -110,8 +110,8 @@ void main() {
     // Verify the dialog is hidden
     expect(find.byType(CircularProgressIndicator), findsNothing);
 
-    // Verify the result
-    expect(result, '');
+    // Verify the result is not set due to error
+    expect(actualResult, '');
 
     // Verify the error was caught
     expect(caughtError, isTrue);
