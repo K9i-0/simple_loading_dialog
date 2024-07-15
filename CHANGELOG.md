@@ -1,3 +1,7 @@
+## 1.0.0
+
+- Initial stable release of `simple_loading_dialog`.
+
 ## 0.6.1
 
 - Added a new example demonstrating the use of a Result type with a custom wrapper function showSimpleLoadingDialogWithResult. This example shows how to handle success and failure cases more conveniently.
