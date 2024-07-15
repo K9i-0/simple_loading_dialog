@@ -6,14 +6,14 @@ import 'package:simple_loading_dialog/simple_loading_dialog.dart';
 
 void main() {
   testWidgets(
-      'showSimpleLoadingDialog shows and hides dialog on future completion',
+      'Given a future that completes successfully, when showSimpleLoadingDialog is called, then the dialog is shown and hides on future completion',
       (tester) async {
-    // Setup a future that completes after a short delay
+    // Given a future that completes successfully
     final completer = Completer<String>();
     var actualResult = '';
     var caughtError = false;
 
-    // Build our app and trigger a frame
+    // Given the widget is built
     await tester.pumpWidget(
       MaterialApp(
         home: Builder(
@@ -23,6 +23,7 @@ void main() {
                 child: ElevatedButton(
                   onPressed: () async {
                     try {
+                      // When showSimpleLoadingDialog is called
                       actualResult = await showSimpleLoadingDialog<String>(
                         context: context,
                         future: () => completer.future,
@@ -40,36 +41,36 @@ void main() {
       ),
     );
 
-    // Tap the button to show the dialog
+    // When the button is tapped
     await tester.tap(find.text('Show Dialog'));
     await tester.pump(); // Start the dialog animation
 
-    // Verify the dialog is shown
+    // Then the dialog is shown
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
 
-    // Complete the future
+    // When the future completes
     completer.complete('Success');
     await tester.pumpAndSettle(); // Wait for all animations to finish
 
-    // Verify the dialog is hidden
+    // Then the dialog is hidden
     expect(find.byType(CircularProgressIndicator), findsNothing);
 
-    // Verify the result
+    // And the result is returned
     expect(actualResult, 'Success');
 
-    // Verify the error was not caught
+    // And no error is caught
     expect(caughtError, isFalse);
   });
 
   testWidgets(
-      'showSimpleLoadingDialog hides dialog and rethrows exception on future error',
+      'Given a future that completes with an error, when showSimpleLoadingDialog is called, then the dialog is shown and hides on future error',
       (tester) async {
-    // Setup a future that completes with an error
+    // Given a future that completes with an error
     final completer = Completer<String>();
     var actualResult = '';
     var caughtError = false;
 
-    // Build our app and trigger a frame
+    // Given the widget is built
     await tester.pumpWidget(
       MaterialApp(
         home: Builder(
@@ -79,6 +80,7 @@ void main() {
                 child: ElevatedButton(
                   onPressed: () async {
                     try {
+                      // When showSimpleLoadingDialog is called
                       actualResult = await showSimpleLoadingDialog<String>(
                         context: context,
                         future: () => completer.future,
@@ -96,24 +98,24 @@ void main() {
       ),
     );
 
-    // Tap the button to show the dialog
+    // When the button is tapped
     await tester.tap(find.text('Show Dialog'));
     await tester.pump(); // Start the dialog animation
 
-    // Verify the dialog is shown
+    // Then the dialog is shown
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
 
-    // Complete the future with an error
+    // When the future completes with an error
     completer.completeError(Exception('Error'));
     await tester.pumpAndSettle(); // Wait for all animations to finish
 
-    // Verify the dialog is hidden
+    // Then the dialog is hidden
     expect(find.byType(CircularProgressIndicator), findsNothing);
 
-    // Verify the result is not set due to error
+    // And the result is not set
     expect(actualResult, '');
 
-    // Verify the error was caught
+    // And the error is caught
     expect(caughtError, isTrue);
   });
 }
