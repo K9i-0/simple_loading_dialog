@@ -289,4 +289,168 @@ void main() {
     // And the result is returned
     expect(actualResult, 'Success');
   });
+
+  Widget buildTestNestedApp({
+    required void Function(BuildContext) onPressed,
+    SimpleLoadingDialogTheme? themeExtension,
+  }) {
+    return MaterialApp(
+      theme: themeExtension != null
+          ? ThemeData(
+              extensions: [
+                themeExtension,
+              ],
+            )
+          : ThemeData(),
+      home: _MyHomePage(onPressed: onPressed),
+    );
+  }
+
+  testWidgets(
+      'Given a future that completes successfully with nested Navigator, when showSimpleLoadingDialog is called, then the dialog is shown and hides on future completion',
+      (tester) async {
+    final completer = Completer<String>();
+    var actualResult = '';
+
+    await tester.pumpWidget(
+      buildTestNestedApp(
+        onPressed: (context) async {
+          actualResult = await showSimpleLoadingDialog<String>(
+            context: context,
+            future: () => completer.future,
+          );
+        },
+      ),
+    );
+
+    // Navigate to the second tab to create a nested navigator scenario
+    await tester.tap(find.text('Tab 2'));
+    await tester.pumpAndSettle();
+
+    // Tap the button to show the dialog
+    await tester.tap(find.text('Show Dialog'));
+    await tester.pump(); // Start the dialog animation
+
+    expect(find.byType(CircularProgressIndicator), findsOneWidget);
+
+    completer.complete('Success');
+    await tester.pump(); // Give time for the completer to complete
+    await tester.pumpAndSettle(); // Wait for all animations to finish
+
+    expect(find.byType(CircularProgressIndicator), findsNothing);
+    expect(actualResult, 'Success');
+  });
+
+  testWidgets(
+      'Given a future that completes with an error with nested Navigator, when showSimpleLoadingDialog is called, then the dialog is shown and hides on future error',
+      (tester) async {
+    final completer = Completer<String>();
+    var actualResult = '';
+    var caughtError = false;
+
+    await tester.pumpWidget(
+      buildTestNestedApp(
+        onPressed: (context) async {
+          try {
+            actualResult = await showSimpleLoadingDialog<String>(
+              context: context,
+              future: () => completer.future,
+            );
+          } on Exception {
+            caughtError = true;
+          }
+        },
+      ),
+    );
+
+    // Navigate to the second tab to create a nested navigator scenario
+    await tester.tap(find.text('Tab 2'));
+    await tester.pumpAndSettle();
+
+    // Tap the button to show the dialog
+    await tester.tap(find.text('Show Dialog'));
+    await tester.pump(); // Start the dialog animation
+
+    expect(find.byType(CircularProgressIndicator), findsOneWidget);
+
+    completer.completeError(Exception('Error'));
+    await tester.pump(); // Give time for the completer to complete
+    await tester.pumpAndSettle(); // Wait for all animations to finish
+
+    expect(find.byType(CircularProgressIndicator), findsNothing);
+    expect(actualResult, '');
+    expect(caughtError, isTrue);
+  });
+}
+
+class _MyHomePage extends StatefulWidget {
+  const _MyHomePage({required void Function(BuildContext) onPressed})
+      : _onPressed = onPressed;
+  final void Function(BuildContext) _onPressed;
+
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<_MyHomePage> {
+  int _selectedIndex = 0;
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final pages = <Widget>[
+      const Center(child: Text('Tab 1')),
+      _NestedNavigatorScreen(
+        onPressed: widget._onPressed,
+      ),
+    ];
+
+    return Scaffold(
+      body: pages[_selectedIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Tab 1',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.business),
+            label: 'Tab 2',
+          ),
+        ],
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
+      ),
+    );
+  }
+}
+
+class _NestedNavigatorScreen extends StatelessWidget {
+  const _NestedNavigatorScreen({required void Function(BuildContext) onPressed})
+      : _onPressed = onPressed;
+  final void Function(BuildContext) _onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return Navigator(
+      onGenerateRoute: (settings) {
+        return MaterialPageRoute(
+          builder: (context) => Scaffold(
+            appBar: AppBar(title: const Text('Nested Navigator')),
+            body: Center(
+              child: ElevatedButton(
+                onPressed: () => _onPressed(context),
+                child: const Text('Show Dialog'),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
 }
