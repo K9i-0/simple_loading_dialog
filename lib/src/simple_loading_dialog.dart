@@ -51,8 +51,6 @@ Future<T> showSimpleLoadingDialog<T>({
     // Consider nested Navigator context
     if (popContext != null && popContext!.mounted) {
       Navigator.of(popContext!).pop();
-    } else if (context.mounted) {
-      Navigator.of(context).pop();
     }
   }
 }

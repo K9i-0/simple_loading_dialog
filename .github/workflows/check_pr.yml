@@ -1,0 +1,42 @@
+name: check-pr
+
+on:
+  pull_request:
+
+jobs:
+  pre-check:
+    runs-on: ubuntu-latest
+    outputs:
+      src: ${{ steps.filter.outputs.src }}
+
+    steps:
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            src:
+              - "**.dart"
+
+  check:
+    needs: pre-check
+    if: ${{ needs.pre-check.outputs.src == 'true' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Application Runtime
+        uses: ./.github/actions/setup-application-runtime
+
+      # https://github.com/invertase/github-action-dart-analyzer
+      - name: Report analyze
+        uses: invertase/github-action-dart-analyzer@v3
+        with:
+          fatal-infos: true
+    
+      - name: Check format
+        run: dart format --set-exit-if-changed .
+
+      - name: Test
+        run: |
+          flutter test --machine > test_report.log
