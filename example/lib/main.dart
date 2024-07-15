@@ -108,10 +108,10 @@ class DemoPage extends StatelessWidget {
                   },
                   // Custom dialog
                   dialogBuilder: (context, _) {
-                    return AlertDialog(
+                    return const AlertDialog(
                       content: Column(
                         mainAxisSize: MainAxisSize.min,
-                        children: const [
+                        children: [
                           SizedBox(height: 16),
                           CircularProgressIndicator(),
                           SizedBox(height: 16),

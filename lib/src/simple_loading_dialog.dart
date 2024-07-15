@@ -22,13 +22,13 @@ Future<T> showSimpleLoadingDialog<T>({
   required BuildContext context,
   required Future<T> Function() future,
   DialogBuilder? dialogBuilder,
-  String message = "Loading...",
+  String message = 'Loading...',
   bool barrierDismissible = false,
 }) async {
   final theme = Theme.of(context).extension<SimpleLoadingDialogTheme>();
   final builder = dialogBuilder ??
       theme?.dialogBuilder ??
-      (BuildContext dialogContext, String message) => const Center(
+      (dialogContext, message) => const Center(
             child: CircularProgressIndicator(),
           );
 

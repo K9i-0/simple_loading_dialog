@@ -60,7 +60,7 @@ class SimpleLoadingDialogTheme
 
   @override
   ThemeExtension<SimpleLoadingDialogTheme> lerp(
-      covariant ThemeExtension<SimpleLoadingDialogTheme>? other, double t) {
+      covariant ThemeExtension<SimpleLoadingDialogTheme>? other, double t,) {
     return this;
   }
 }
