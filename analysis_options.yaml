@@ -6,6 +6,8 @@ include: package:yumemi_lints/flutter/3.7/recommended.yaml
 analyzer:
   errors:
       todo: ignore
+  exclude:
+    - build/**
 linter:
   rules:
     lines_longer_than_80_chars: false

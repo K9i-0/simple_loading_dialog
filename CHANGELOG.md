@@ -1,3 +1,9 @@
+## Unreleased
+
+- Update development dependencies while retaining Dart 2.19 and Flutter 3.7 support.
+- Check dependency-only pull requests and the minimum supported SDK in CI.
+- Include the example app in weekly Dependabot updates.
+
 ## 1.0.0
 
 - Initial stable release of `simple_loading_dialog`.

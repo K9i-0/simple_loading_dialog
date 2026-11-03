@@ -2,41 +2,51 @@ name: check-pr
 
 on:
   pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
 
 jobs:
-  pre-check:
-    runs-on: ubuntu-latest
-    outputs:
-      src: ${{ steps.filter.outputs.src }}
-
-    steps:
-      - uses: dorny/paths-filter@v3
-        id: filter
-        with:
-          filters: |
-            src:
-              - "**.dart"
-
   check:
-    needs: pre-check
-    if: ${{ needs.pre-check.outputs.src == 'true' }}
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Setup Application Runtime
         uses: ./.github/actions/setup-application-runtime
 
-      # https://github.com/invertase/github-action-dart-analyzer
-      - name: Report analyze
-        uses: invertase/github-action-dart-analyzer@v3
-        with:
-          fatal-infos: true
-    
+      - name: Analyze package and example
+        run: flutter analyze --fatal-infos --no-pub
+
       - name: Check format
-        run: dart format --set-exit-if-changed .
+        run: dart format --output=none --set-exit-if-changed lib test example/lib
 
       - name: Test
+        run: flutter test --no-pub
+
+  minimum-sdk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
+        with:
+          flutter-version: "3.7.0"
+          channel: stable
+          cache: true
+
+      # The example uses Dart 3, but the package still supports Dart 2.19.
+      # dart pub get resolves only this package on the minimum SDK.
+      - name: Install package dependencies
+        run: dart pub get
+
+      - name: Analyze package on minimum SDK
         run: |
-          flutter test --machine > test_report.log
+          dart analyze --fatal-infos lib
+          dart analyze --fatal-infos test
+
+      - name: Test on minimum SDK
+        run: flutter test --no-pub

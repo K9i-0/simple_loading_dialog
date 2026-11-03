@@ -1,11 +1,10 @@
 version: 2
-updates: 
-  # Maintain dependencies for GitHub Actions
+updates:
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "weekly"
-      # Monday at 9am JST
+      day: "monday"
       timezone: "Asia/Tokyo"
       time: "09:00"
     groups:
@@ -13,10 +12,12 @@ updates:
         patterns:
           - "*"
   - package-ecosystem: "pub"
-    directory: "/"
+    directories:
+      - "/"
+      - "/example"
     schedule:
       interval: "weekly"
-      # Monday at 9am JST
+      day: "monday"
       timezone: "Asia/Tokyo"
       time: "09:00"
     groups:
