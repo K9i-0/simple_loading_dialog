@@ -1,0 +1,18 @@
+{
+  "mcpServers": {
+    "dart-mcp": {
+      "type": "stdio",
+      "command": "dart",
+      "args": [
+        "mcp-server",
+        "--enable",
+        "flutter_app_lifecycle"
+      ]
+    },
+    "marionette": {
+      "type": "stdio",
+      "command": "marionette_mcp",
+      "args": []
+    }
+  }
+}

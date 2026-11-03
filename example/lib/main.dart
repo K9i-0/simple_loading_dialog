@@ -15,166 +15,182 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         useMaterial3: true,
         colorSchemeSeed: Colors.blue,
-        // Set default theme like this
-        //   extensions: [
-        //     SimpleLoadingDialogTheme(
-        //       dialogBuilder: (context, message) {
-        //         return AlertDialog(
-        //           content: Column(
-        //             mainAxisSize: MainAxisSize.min,
-        //             children: [
-        //               const SizedBox(height: 16),
-        //               const CircularProgressIndicator(),
-        //               const SizedBox(height: 16),
-        //               Text(message),
-        //               const SizedBox(height: 16),
-        //             ],
-        //           ),
-        //         );
-        //       },
-        //     ),
-        //   ],
+        // Set the default dialog builder with a theme extension.
+        extensions: [
+          SimpleLoadingDialogTheme(
+            dialogBuilder: (context, message) => const Center(
+              key: ValueKey('loading_dialog'),
+              child: CircularProgressIndicator(semanticsLabel: 'Loading'),
+            ),
+          ),
+        ],
       ),
       home: const DemoPage(),
     );
   }
 }
 
-class DemoPage extends StatelessWidget {
+class DemoPage extends StatefulWidget {
   const DemoPage({super.key});
+
+  @override
+  State<DemoPage> createState() => _DemoPageState();
+}
+
+class _DemoPageState extends State<DemoPage> {
+  String _resultMessage = 'Choose an example to begin.';
+  String _resultKey = 'idle_result';
+
+  void _showResult(String message, String resultKey) {
+    if (!mounted) {
+      return;
+    }
+    setState(() {
+      _resultMessage = message;
+      _resultKey = resultKey;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Simple Loading Dialog Demo'),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // Success case
-            ElevatedButton(
-              onPressed: () async {
-                final result = await showSimpleLoadingDialog<String>(
-                  context: context,
-                  future: () async {
-                    await Future<void>.delayed(const Duration(seconds: 1));
-                    return 'Hello';
+      appBar: AppBar(title: const Text('Simple Loading Dialog Demo')),
+      body: SafeArea(
+        child: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Success case
+                ElevatedButton(
+                  key: const ValueKey('success_button'),
+                  onPressed: () async {
+                    _showResult('Running success example...', 'pending_result');
+                    final result = await showSimpleLoadingDialog<String>(
+                      context: context,
+                      future: () async {
+                        await Future<void>.delayed(const Duration(seconds: 2));
+                        return 'Hello';
+                      },
+                    );
+                    _showResult('Success result: $result', 'success_result');
                   },
-                );
-
-                if (context.mounted) {
-                  context.showMessageSnackBar('Success result: $result');
-                }
-              },
-              child: const Text('Show loading dialog'),
-            ),
-            const SizedBox(
-              height: 32,
-            ),
-            // Error case
-            ElevatedButton(
-              onPressed: () async {
-                try {
-                  final result = await showSimpleLoadingDialog<String>(
-                    context: context,
-                    future: () async {
-                      await Future<void>.delayed(const Duration(seconds: 1));
-                      throw Exception('Error');
-                    },
-                  );
-
-                  if (context.mounted) {
-                    context.showMessageSnackBar('Success result: $result');
-                  }
-                } catch (e) {
-                  if (context.mounted) {
-                    context.showMessageSnackBar('Failed result: $e');
-                  }
-                }
-              },
-              child: const Text('Show loading dialog with error'),
-            ),
-            const SizedBox(
-              height: 32,
-            ),
-            // Custom dialog
-            ElevatedButton(
-              onPressed: () async {
-                final result = await showSimpleLoadingDialog<String>(
-                  context: context,
-                  future: () async {
-                    await Future<void>.delayed(const Duration(seconds: 1));
-                    return 'World';
+                  child: const Text('Show loading dialog'),
+                ),
+                const SizedBox(height: 24),
+                // Error case
+                ElevatedButton(
+                  key: const ValueKey('error_button'),
+                  onPressed: () async {
+                    _showResult('Running error example...', 'pending_result');
+                    try {
+                      await showSimpleLoadingDialog<String>(
+                        context: context,
+                        future: () async {
+                          await Future<void>.delayed(
+                            const Duration(seconds: 2),
+                          );
+                          throw Exception('Error');
+                        },
+                      );
+                    } catch (error) {
+                      _showResult('Failed result: $error', 'error_result');
+                    }
                   },
-                  // Custom dialog
-                  dialogBuilder: (context, _) {
-                    return const AlertDialog(
-                      content: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          SizedBox(height: 16),
-                          CircularProgressIndicator(),
-                          SizedBox(height: 16),
-                          Text('Loading...'),
-                          SizedBox(height: 16),
-                        ],
-                      ),
+                  child: const Text('Show loading dialog with error'),
+                ),
+                const SizedBox(height: 24),
+                // A per-call builder overrides the theme's dialog builder.
+                ElevatedButton(
+                  key: const ValueKey('custom_dialog_button'),
+                  onPressed: () async {
+                    _showResult('Running custom dialog...', 'pending_result');
+                    final result = await showSimpleLoadingDialog<String>(
+                      context: context,
+                      future: () async {
+                        await Future<void>.delayed(const Duration(seconds: 2));
+                        return 'World';
+                      },
+                      dialogBuilder: (context, message) {
+                        return AlertDialog(
+                          key: const ValueKey('custom_loading_dialog'),
+                          content: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const SizedBox(height: 16),
+                              const CircularProgressIndicator(),
+                              const SizedBox(height: 16),
+                              Text(
+                                message,
+                                key: const ValueKey('custom_loading_message'),
+                              ),
+                              const SizedBox(height: 16),
+                            ],
+                          ),
+                        );
+                      },
+                    );
+                    _showResult(
+                      'Custom dialog result: $result',
+                      'custom_result',
                     );
                   },
-                );
-
-                if (context.mounted) {
-                  context.showMessageSnackBar('Success result: $result');
-                }
-              },
-              child: const Text('Show loading dialog with custom dialog'),
-            ),
-            const SizedBox(
-              height: 32,
-            ),
-
-            // Optional: Show loading dialog with result
-            ElevatedButton(
-              onPressed: () async {
-                final result = await showSimpleLoadingDialogWithResult<String>(
-                  context: context,
-                  future: () async {
-                    await Future<void>.delayed(const Duration(seconds: 1));
-                    // return 'Hello';
-                    throw Exception('Error');
+                  child: const Text('Show loading dialog with custom dialog'),
+                ),
+                const SizedBox(height: 24),
+                // Optional: return a Result instead of throwing an exception.
+                ElevatedButton(
+                  key: const ValueKey('result_wrapper_button'),
+                  onPressed: () async {
+                    _showResult('Running Result wrapper...', 'pending_result');
+                    final result =
+                        await showSimpleLoadingDialogWithResult<String>(
+                          context: context,
+                          future: () async {
+                            await Future<void>.delayed(
+                              const Duration(seconds: 2),
+                            );
+                            throw Exception('Error');
+                          },
+                        );
+                    switch (result) {
+                      case Success():
+                        _showResult(
+                          'Result wrapper success: ${result.value}',
+                          'wrapped_result',
+                        );
+                      case Failure():
+                        _showResult(
+                          'Result wrapper failure: ${result.error}',
+                          'wrapped_result',
+                        );
+                    }
                   },
-                );
-
-                if (context.mounted) {
-                  switch (result) {
-                    case Success():
-                      context.showMessageSnackBar(
-                          'Success result: ${result.value}');
-                    case Failure():
-                      context.showMessageSnackBar(
-                          'Failed result: ${result.error}');
-                  }
-                }
-              },
-              child: const Text('Optional: Show loading dialog with result'),
+                  child: const Text(
+                    'Optional: Show loading dialog with result',
+                  ),
+                ),
+                const SizedBox(height: 32),
+                // Keep the last outcome visible until the next example runs.
+                Semantics(
+                  liveRegion: true,
+                  child: Card(
+                    key: const ValueKey('demo_result'),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Text(
+                        _resultMessage,
+                        key: ValueKey(_resultKey),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
-      ),
-    );
-  }
-}
-
-// This function is used to display a snackbar at the bottom of the current screen.
-// It is called by the following code: context.showMessageSnackBar("Hello World");
-extension BuildContextX on BuildContext {
-  void showMessageSnackBar(String message) {
-    ScaffoldMessenger.of(this).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        duration: const Duration(milliseconds: 500),
       ),
     );
   }

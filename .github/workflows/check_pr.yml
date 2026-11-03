@@ -22,9 +22,13 @@ jobs:
         run: flutter analyze --fatal-infos --no-pub
 
       - name: Check format
-        run: dart format --output=none --set-exit-if-changed lib test example/lib
+        run: dart format --output=none --set-exit-if-changed lib test example/lib example/test example/tool
 
       - name: Test
+        run: flutter test --no-pub
+
+      - name: Test example workflows
+        working-directory: example
         run: flutter test --no-pub
 
   minimum-sdk:

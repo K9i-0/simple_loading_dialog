@@ -31,3 +31,7 @@ build/
 
 # FVM Version Cache
 .fvm/
+
+# Local AI runtime evidence
+.marionette/
+artifacts/

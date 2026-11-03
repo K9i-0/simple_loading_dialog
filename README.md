@@ -191,3 +191,5 @@ ElevatedButton(
 ## License
 
 This package is licensed under the MIT License. See the [LICENSE](https://github.com/K9i-0/simple_loading_dialog/blob/main/LICENSE) file for details.
+
+For development checks and AI-driven example verification, see [AGENTS.md](AGENTS.md) and the [runtime guide](docs/ai-verification.md).
