@@ -15,10 +15,23 @@ no global CLI version to drift from the project. Run from the repository root:
 PATROL_DEVICE=<ios-simulator-id> bash tool/patrol_ios.sh
 ```
 
-Select a simulator ID from `flutter devices`; boot an available iPhone simulator
-if needed. Auto-selection is CI-only; an explicitly selected simulator is booted if needed. Additional
-Patrol options can be passed after the command. For parallel local sessions use
-distinct `--test-server-port` and `--app-server-port` values.
+Select a simulator ID from `flutter devices`. Auto-selection is CI-only; an
+explicitly selected simulator is booted if needed. Additional Patrol options can
+be passed after the command. For parallel local sessions use distinct
+`--test-server-port` and `--app-server-port` values.
+
+CI uses macOS 26, Xcode 26.2, and an iPhone 17 running iOS 26.2, matching
+[Patrol's upstream simulator workflow](https://github.com/leancodepl/patrol/blob/master/.github/workflows/test-ios-simulator.yaml).
+`DEVELOPER_DIR` selects Xcode; `PATROL_IOS_VERSION` and `PATROL_DEVICE_NAME`
+restrict simulator selection. Pin both Xcode and the runtime when changing this
+configuration so an installed newer runtime is not paired with an older default
+Xcode. Local runs can continue using an explicit `PATROL_DEVICE` without these
+optional filters.
+
+Simulator boot has a 600-second limit. A timeout fails the command before
+running tests; it does not erase devices or retry automatically. Inspect the
+boot output in `example/build/patrol_logs/simulator-boot.log` and the selected
+runtime before retrying.
 
 Require a zero exit code and check the reported case count: no failed or skipped
 cases. A successful compile or app launch is not a passing E2E run. Patrol writes
