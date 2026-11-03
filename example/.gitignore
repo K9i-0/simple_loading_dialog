@@ -44,3 +44,7 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Generated Patrol test bundles and local secrets.
+**/test_bundle.dart
+.patrol.env

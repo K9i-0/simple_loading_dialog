@@ -18,6 +18,19 @@ dev_dependencies:
     sdk: flutter
   flutter_lints: ^6.0.0
   marionette_flutter: ^0.7.0
+  patrol: 4.11.0
+  patrol_cli: 4.9.0
+  patrol_mcp: 0.2.2
 
 flutter:
   uses-material-design: true
+  config:
+    enable-swift-package-manager: false
+
+patrol:
+  app_name: Simple Loading Dialog Demo
+  test_directory: patrol_test
+  android:
+    package_name: com.k9i.simple_loading_dialog.example
+  ios:
+    bundle_id: com.k9i.simpleloadingdialog.example

@@ -1,3 +1,4 @@
+import 'package:example/demo_keys.dart';
 import 'package:flutter/material.dart';
 import 'package:simple_loading_dialog/simple_loading_dialog.dart';
 
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
         extensions: [
           SimpleLoadingDialogTheme(
             dialogBuilder: (context, message) => const Center(
-              key: ValueKey('loading_dialog'),
+              key: ValueKey(DemoKeys.loadingDialog),
               child: CircularProgressIndicator(semanticsLabel: 'Loading'),
             ),
           ),
@@ -39,7 +40,7 @@ class DemoPage extends StatefulWidget {
 
 class _DemoPageState extends State<DemoPage> {
   String _resultMessage = 'Choose an example to begin.';
-  String _resultKey = 'idle_result';
+  String _resultKey = DemoKeys.idleResult;
 
   void _showResult(String message, String resultKey) {
     if (!mounted) {
@@ -64,9 +65,12 @@ class _DemoPageState extends State<DemoPage> {
               children: [
                 // Success case
                 ElevatedButton(
-                  key: const ValueKey('success_button'),
+                  key: const ValueKey(DemoKeys.successButton),
                   onPressed: () async {
-                    _showResult('Running success example...', 'pending_result');
+                    _showResult(
+                      'Running success example...',
+                      DemoKeys.pendingResult,
+                    );
                     final result = await showSimpleLoadingDialog<String>(
                       context: context,
                       future: () async {
@@ -74,16 +78,22 @@ class _DemoPageState extends State<DemoPage> {
                         return 'Hello';
                       },
                     );
-                    _showResult('Success result: $result', 'success_result');
+                    _showResult(
+                      'Success result: $result',
+                      DemoKeys.successResult,
+                    );
                   },
                   child: const Text('Show loading dialog'),
                 ),
                 const SizedBox(height: 24),
                 // Error case
                 ElevatedButton(
-                  key: const ValueKey('error_button'),
+                  key: const ValueKey(DemoKeys.errorButton),
                   onPressed: () async {
-                    _showResult('Running error example...', 'pending_result');
+                    _showResult(
+                      'Running error example...',
+                      DemoKeys.pendingResult,
+                    );
                     try {
                       await showSimpleLoadingDialog<String>(
                         context: context,
@@ -95,7 +105,10 @@ class _DemoPageState extends State<DemoPage> {
                         },
                       );
                     } catch (error) {
-                      _showResult('Failed result: $error', 'error_result');
+                      _showResult(
+                        'Failed result: $error',
+                        DemoKeys.errorResult,
+                      );
                     }
                   },
                   child: const Text('Show loading dialog with error'),
@@ -103,9 +116,12 @@ class _DemoPageState extends State<DemoPage> {
                 const SizedBox(height: 24),
                 // A per-call builder overrides the theme's dialog builder.
                 ElevatedButton(
-                  key: const ValueKey('custom_dialog_button'),
+                  key: const ValueKey(DemoKeys.customDialogButton),
                   onPressed: () async {
-                    _showResult('Running custom dialog...', 'pending_result');
+                    _showResult(
+                      'Running custom dialog...',
+                      DemoKeys.pendingResult,
+                    );
                     final result = await showSimpleLoadingDialog<String>(
                       context: context,
                       future: () async {
@@ -114,7 +130,7 @@ class _DemoPageState extends State<DemoPage> {
                       },
                       dialogBuilder: (context, message) {
                         return AlertDialog(
-                          key: const ValueKey('custom_loading_dialog'),
+                          key: const ValueKey(DemoKeys.customLoadingDialog),
                           content: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
@@ -123,7 +139,9 @@ class _DemoPageState extends State<DemoPage> {
                               const SizedBox(height: 16),
                               Text(
                                 message,
-                                key: const ValueKey('custom_loading_message'),
+                                key: const ValueKey(
+                                  DemoKeys.customLoadingMessage,
+                                ),
                               ),
                               const SizedBox(height: 16),
                             ],
@@ -133,7 +151,7 @@ class _DemoPageState extends State<DemoPage> {
                     );
                     _showResult(
                       'Custom dialog result: $result',
-                      'custom_result',
+                      DemoKeys.customResult,
                     );
                   },
                   child: const Text('Show loading dialog with custom dialog'),
@@ -141,9 +159,12 @@ class _DemoPageState extends State<DemoPage> {
                 const SizedBox(height: 24),
                 // Optional: return a Result instead of throwing an exception.
                 ElevatedButton(
-                  key: const ValueKey('result_wrapper_button'),
+                  key: const ValueKey(DemoKeys.resultWrapperButton),
                   onPressed: () async {
-                    _showResult('Running Result wrapper...', 'pending_result');
+                    _showResult(
+                      'Running Result wrapper...',
+                      DemoKeys.pendingResult,
+                    );
                     final result =
                         await showSimpleLoadingDialogWithResult<String>(
                           context: context,
@@ -158,12 +179,12 @@ class _DemoPageState extends State<DemoPage> {
                       case Success():
                         _showResult(
                           'Result wrapper success: ${result.value}',
-                          'wrapped_result',
+                          DemoKeys.wrappedResult,
                         );
                       case Failure():
                         _showResult(
                           'Result wrapper failure: ${result.error}',
-                          'wrapped_result',
+                          DemoKeys.wrappedResult,
                         );
                     }
                   },
@@ -176,7 +197,7 @@ class _DemoPageState extends State<DemoPage> {
                 Semantics(
                   liveRegion: true,
                   child: Card(
-                    key: const ValueKey('demo_result'),
+                    key: const ValueKey(DemoKeys.demoResult),
                     child: Padding(
                       padding: const EdgeInsets.all(16),
                       child: Text(

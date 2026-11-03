@@ -1,5 +1,8 @@
 # AI verification of the example
 
+For repeatable regressions and the required release gate, use [Patrol](patrol.md).
+This guide covers exploratory runtime inspection.
+
 Use this guide with [AGENTS.md](../AGENTS.md). The example has two entrypoints:
 
 - `example/lib/main.dart`: the ordinary demo, with no Marionette initialization.
