@@ -1,4 +1,6 @@
 import 'package:example/demo_keys.dart';
+// The package still supports Flutter 3.7, which predates material_ui.
+// ignore: deprecated_member_use
 import 'package:flutter/material.dart';
 import 'package:simple_loading_dialog/simple_loading_dialog.dart';
 

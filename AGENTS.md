@@ -4,7 +4,7 @@ Flutter package wrapping a Future with a loading dialog. Public APIs are in `lib
 
 ## Setup and verification
 
-Use Flutter 3.47.9 from `.fvmrc` for development. Preserve published Dart 2.19 / Flutter 3.7 compatibility. The unpublished example needs a newer SDK for its automation tools.
+Use Flutter 3.50.0 from `.fvmrc` for development. Preserve published Dart 2.19 / Flutter 3.7 compatibility. The unpublished example needs a newer SDK for its automation tools.
 
 From the repository root:
 

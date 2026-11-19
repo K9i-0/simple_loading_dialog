@@ -1,4 +1,6 @@
 import 'package:example/main.dart';
+// The package still supports Flutter 3.7, which predates material_ui.
+// ignore: deprecated_member_use
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
