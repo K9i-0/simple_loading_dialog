@@ -12,7 +12,7 @@ Use this guide with [AGENTS.md](../AGENTS.md). The example has two entrypoints:
 
 Marionette is an example development dependency. It does not change the
 published library's Dart 2.19 / Flutter 3.7 compatibility. The unpublished example
-requires Flutter 3.47 or newer; use Flutter **3.50.0** from `.fvmrc`
+requires Flutter 3.47 or newer; use Flutter **3.50.1** from `.mise.toml`
 for the development checks below.
 
 ## Setup

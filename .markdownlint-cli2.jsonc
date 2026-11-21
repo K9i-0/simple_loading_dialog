@@ -14,7 +14,6 @@
     "**/*.md"
   ],
   "ignores": [
-    ".fvm/**/*.md",
     ".idea/**/*.md",
     "**/.dart_tool/**/*.md",
     "**/ios/.symlinks/**/*.md",
